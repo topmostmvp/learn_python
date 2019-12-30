@@ -1,0 +1,15 @@
+{
+    "editor.fontSize": 18,
+    // 以下两行必须
+    "editor.fontFamily": "'Fira Code'",
+    "editor.fontLigatures": true,
+    //下面四行分别设置不同粗细的字体，选择一种
+    // "editor.fontWeight": "300",// Light
+    "editor.fontWeight": "400", // Regular
+    // "editor.fontWeight": "500", // Medium
+    // "editor.fontWeight": "600", // Bold
+
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true,
+    "python.pythonPath": "/usr/bin/python3"  
+}
