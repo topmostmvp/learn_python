@@ -1,11 +1,12 @@
 import sys
 from time import sleep
+import json
 
 import pygame
 from alien import Alien
 from bullet import Bullet
 
-def check_keydown_events(event, ai_settings, screen, ship, bullets):
+def check_keydown_events(event, ai_settings, screen, ship, bullets, stats):
     '''响应按键'''
     if event.key == pygame.K_RIGHT:
         ship.moving_right = True
@@ -14,6 +15,7 @@ def check_keydown_events(event, ai_settings, screen, ship, bullets):
     elif event.key == pygame.K_SPACE:
         fire_bullet(ai_settings, screen, ship, bullets)
     elif event.key == pygame.K_q:
+        store_heigh_score(stats)
         sys.exit()
         
 def fire_bullet(ai_settings, screen, ship, bullets):
@@ -34,9 +36,12 @@ def check_events(ai_settings, screen, stats, sb, play_button, ship, aliens, bull
     '''响应按键和鼠标事件'''
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+
+            #　存储最高分
+            store_heigh_score(stats)
             sys.exit()
         elif event.type == pygame.KEYDOWN:
-            check_keydown_events(event, ai_settings, screen, ship, bullets)
+            check_keydown_events(event, ai_settings, screen, ship, bullets, stats)
         elif event.type == pygame.KEYUP:
             check_keyup_events(event, ship)
         elif event.type == pygame.MOUSEBUTTONDOWN: # 无论单击什么地方都触发
@@ -54,6 +59,10 @@ def check_play_button(ai_settings, screen, stats, sb, play_button, ship, aliens,
         # 重置游戏统计信息
         stats.reset_stats()
         stats.game_avtive = True
+
+        # 加载最高分
+        with open("high_score.json") as obj:
+            stats.high_score = json.load(obj)
 
         #　重置记分牌图像
         sb.prep_score()
@@ -217,3 +226,8 @@ def chack_high_score(stats, sb):
     if stats.score > stats.high_score:
         stats.high_score = stats.score
         sb.prep_high_score()
+
+def store_heigh_score(stats):
+    '''存储最高分'''
+    with open("high_score.json", "w") as obj:
+        json.dump(stats.high_score, obj)
